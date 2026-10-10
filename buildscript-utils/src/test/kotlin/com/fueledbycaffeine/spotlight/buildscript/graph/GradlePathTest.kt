@@ -93,15 +93,19 @@ class GradlePathTest {
       ":foo:bar" to "foo.bar",
       ":kebab-case" to "kebabCase",
       ":snake_case" to "snakeCase",
-      ":UpperCase" to "UpperCase",
+      ":UpperCase" to "upperCase",
       ":ALL_CAPS" to "ALLCAPS",
-      ":a-b_c-d_e:f-g_h-i_j" to "aBCDE:fGHIJ",
+      ":a-b_c-d_e:f-g_h-i_j" to "ABCDE.FGHIJ",
+      ":MdsLibrary" to "mdsLibrary",
+      ":SuuntoConnectivity" to "suuntoConnectivity",
+      ":STTAndroidCore" to "STTAndroidCore",
+      ":library:MdsFit:annotations" to "library.mdsFit.annotations",
     )
     val convertedPaths = projectPaths.keys.map { path ->
       GradlePath(buildRoot, path).typeSafeAccessorName
     }
-    projectPaths.values.zip(convertedPaths).forEach { (actual, expected) ->
-      assertThat(actual).equals(expected)
+    projectPaths.values.zip(convertedPaths).forEach { (expected, actual) ->
+      assertThat(actual).isEqualTo(expected)
     }
   }
 

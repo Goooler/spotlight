@@ -69,8 +69,9 @@ public data class GradlePath(
       .splitToSequence(GRADLE_PATH_SEP)
       .joinToString(".") { child ->
         child.splitToSequence(Regex("[.\\-_]"))
-          .mapIndexed { i, segment -> if (i != 0) segment.capitalize() else segment }
+          .map { it.capitalize() }
           .joinToString("")
+          .decapitalize()
       }
 
   public val isRootProject: Boolean get() = path == GRADLE_PATH_SEP
@@ -140,6 +141,13 @@ public fun Path.gradlePathRelativeTo(buildRoot: Path): GradlePath {
 
 private fun String.capitalize(): String = replaceFirstChar {
   if (it.isLowerCase()) it.titlecase(getDefault()) else it.toString()
+}
+
+private fun String.decapitalize(): String {
+  if (isEmpty() || (length > 1 && this[0].isUpperCase() && this[1].isUpperCase())) {
+    return this
+  }
+  return replaceFirstChar { it.lowercase(getDefault()) }
 }
 
 /**
